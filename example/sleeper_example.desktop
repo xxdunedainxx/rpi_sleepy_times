@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Sleepy Times
+Exec=python /home/pi/Desktop/sleep.py
+Icon=/home/pi/Documents/clock.png
+terminal=false

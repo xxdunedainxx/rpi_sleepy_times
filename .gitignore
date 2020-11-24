@@ -1,3 +1,8 @@
 .idea/*
 
 *.pyc
+
+# Setup artifacts ignore
+rpisleepytimer.egg-info/
+dist/
+build/

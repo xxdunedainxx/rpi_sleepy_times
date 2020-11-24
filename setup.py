@@ -31,3 +31,7 @@ setup(
 from src.Util import installer
 
 installer()
+
+import os
+
+print(os.getcwd())

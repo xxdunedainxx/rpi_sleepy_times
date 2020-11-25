@@ -11,7 +11,7 @@ def desktop_icon_raspbian():
   Icon={installLocation}/assets/clock.png
   terminal = false""")
 
-  location=f"{os.path.expanduser('~')}/Desktop/Rpi Sleepy Times"
+  location=f"{os.path.expanduser('~')}/Desktop/RpiSleepy"
 
   with open(location, "w+") as writer:
     writer.write(desktopEntryText)

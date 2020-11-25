@@ -1,6 +1,6 @@
 from src.Sleeper import sleeper
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QDesktopWidget
 from PyQt5.QtCore import pyqtSlot
 
 class SleepyGui(QMainWindow):
@@ -12,11 +12,18 @@ class SleepyGui(QMainWindow):
     self.top = 10
     self.width = 400
     self.height = 140
+    self.setup_center()
     self.initUI()
     self.text_input = ''
 
   def run(self):
     self.initUI()
+
+  def setup_center(self):
+    self.qtRectangle = self.frameGeometry()
+    centerPoint = QDesktopWidget().availableGeometry().center()
+    self.qtRectangle.moveCenter(centerPoint)
+    self.move(self.qtRectangle.topLeft())
 
   def initUI(self):
     self.setWindowTitle(self.title)
@@ -35,6 +42,7 @@ class SleepyGui(QMainWindow):
     # connect button to function on_click
     self.button.clicked.connect(self.on_click)
     self.show()
+    self.move(self.qtRectangle.topLeft())
 
   @pyqtSlot()
   def on_click(self):

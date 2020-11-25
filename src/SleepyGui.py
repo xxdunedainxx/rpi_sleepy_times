@@ -1,76 +1,56 @@
 from src.Sleeper import sleeper
 
-# import kivy module
-import kivy
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox
+from PyQt5.QtCore import pyqtSlot
 
-# base Class of your App inherits from the App class.
-# app:always refers to the instance of your application
-from kivy.app import App
+class SleepyGui(QMainWindow):
 
-# this restrict the kivy version i.e
-# below this kivy version you cannot
-# use the app or software
-kivy.require('1.9.1')
+  def __init__(self):
+    super().__init__()
+    self.title = 'Sleepy Times :)'
+    self.left = 10
+    self.top = 10
+    self.width = 400
+    self.height = 140
+    self.initUI()
+    self.text_input = ''
 
-# creates the button in kivy
-# if not imported shows the error
-from kivy.uix.button import Button
+  def run(self):
+    self.initUI()
 
-# The TextInput widget provides a
-# box for editable plain text
-from kivy.uix.textinput import TextInput
+  def initUI(self):
+    self.setWindowTitle(self.title)
+    self.setGeometry(self.left, self.top, self.width, self.height)
 
-# BoxLayout arranges widgets in either
-# in vertical fashion that
-# is one on top of another or in
-# horizontal fashion that is one after another.
-from kivy.uix.boxlayout import BoxLayout
+    # Create textbox
+    self.textbox = QLineEdit(self)
+    self.textbox.move(20, 20)
+    self.textbox.resize(280, 40)
 
-# to change the kivy default settings we use this module config
-from kivy.config import Config
+    # Create a button in the window
+    self.button = QPushButton('Schedule some sleep!', self)
+    self.button.setGeometry(200, 300, 300, 40)
+    self.button.move(20, 80)
 
-# 0 being off 1 being on as in true / false
-# you can use 0 or 1 && True or False
-Config.set('graphics', 'resizable', True)
+    # connect button to function on_click
+    self.button.clicked.connect(self.on_click)
+    self.show()
 
-# Create the App class
-class SleepyGui(App):
+  @pyqtSlot()
+  def on_click(self):
+    self.text_input = self.textbox.text()
+    self.execute_timer()
+    #QMessageBox.question(self, 'Message - pythonspot.com', "You typed: " + textboxValue, QMessageBox.Ok, QMessageBox.Ok)
+    #self.textbox.setText("")
 
-    def __init__(self):
-      App.__init__(self)
-      self.text_input: TextInput = None
-      self.button: Button = None
-      self.layout: BoxLayout = None
-
-    # defining build()
-    def build(self):
-
-                # Telling orientation
-        self.layout = BoxLayout(orientation ='vertical', )
-
-        # Adding the text input
-        self.text_input = TextInput(font_size = 30,
-                    size_hint_y = None,
-                    height = 100)
-
-        # Adding Button and styling
-        self.button = Button(text ="Sleepy timer :)",
-                   font_size ="20sp",
-                   background_color =(.67, 1, .33, 1),
-                   color =(1, 1, 1, 1) )
-        self.button.bind(on_press=self.execute_timer)
-
-        self.layout.add_widget(self.text_input)
-        self.layout.add_widget(self.button)
-
-        return self.layout
-
-    def execute_timer(self, instance):
-      print(instance)
-      if self.text_input.text == '':
-        self.button.text = 'Please provide a number (in minutes)'
-      elif not str(self.text_input.text).isnumeric():
-        self.button.text = 'Please provide a number a valid number (in minutes)'
-      else:
-        self.button.text = 'Sleeping...'
-        sleeper(int(self.text_input.text))
+  def execute_timer(self):
+    if self.text_input == '':
+      self.setWindowTitle('Please provide a number (in minutes)')
+      self.textbox.clear()
+    elif not str(self.text_input).isnumeric():
+      self.setWindowTitle('Please provide a number a valid number (in minutes)')
+      self.textbox.clear()
+    else:
+      self.textbox.clear()
+      self.setWindowTitle('Sleeping...')
+      sleeper(int(self.text_input))

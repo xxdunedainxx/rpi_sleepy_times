@@ -10,7 +10,7 @@ def sleeper(SHUTDOWN_TIME_MINUTES: int = 45):
 
   with open(scriptName, "w+") as sleepyScript:
     sleepyScript.write(f"sleep {total_time_seconds}\n")
-    sleepyScript.write('shutdown')
+    sleepyScript.write('sudo shutdown now')
     sleepyScript.flush()
     sleepyScript.close()
 

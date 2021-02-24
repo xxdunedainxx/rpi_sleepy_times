@@ -1,5 +1,3 @@
-import os
-
 class KasaAPI:
   KASA_HOSTS: dict = {
    'raspberry pi' : '10.0.0.210',

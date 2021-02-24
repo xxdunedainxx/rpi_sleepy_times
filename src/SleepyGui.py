@@ -1,6 +1,7 @@
 from src.Sleeper import sleeper
+from src.Kasa import  KasaAPI
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QPushButton, QAction, QLineEdit, QMessageBox, QDesktopWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget,QComboBox, QPushButton, QAction, QLineEdit, QMessageBox, QDesktopWidget
 from PyQt5.QtCore import pyqtSlot
 
 class SleepyGui(QMainWindow):
@@ -39,10 +40,22 @@ class SleepyGui(QMainWindow):
     self.button.setGeometry(200, 300, 300, 40)
     self.button.move(20, 80)
 
+    if KasaAPI.KASA_ENABLED:
+      self.cb = QComboBox(self)
+      self.cb.addItems(list(KasaAPI.KASA_HOSTS.keys()))
+      self.cb.currentIndexChanged.connect(self.selectionchange)
+      self.cb.move(300,30)
+
     # connect button to function on_click
     self.button.clicked.connect(self.on_click)
     self.show()
     self.move(self.qtRectangle.topLeft())
+
+  def selectionchange(self, i):
+
+    for count in range(self.cb.count()):
+      print(self.cb.itemText(count))
+    print("Current index", i, "selection changed ", self.cb.currentText())
 
   @pyqtSlot()
   def on_click(self):
@@ -61,4 +74,4 @@ class SleepyGui(QMainWindow):
     else:
       self.textbox.clear()
       self.setWindowTitle('Sleeping...')
-      sleeper(int(self.text_input))
+      sleeper(int(self.text_input), kasaHost=(self.cb.currentText() if KasaAPI.KASA_ENABLED else ''))

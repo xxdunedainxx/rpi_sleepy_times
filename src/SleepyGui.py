@@ -1,5 +1,5 @@
 from src.Sleeper import sleeper
-from src.Kasa import  KasaAPI
+from src.Kasa import KasaAPI
 
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget,QComboBox, QPushButton, QAction, QLineEdit, QMessageBox, QDesktopWidget
 from PyQt5.QtCore import pyqtSlot
@@ -12,7 +12,7 @@ class SleepyGui(QMainWindow):
     self.left = 10
     self.top = 10
     self.width = 400
-    self.height = 140
+    self.height = 250
     self.setup_center()
     self.initUI()
     self.text_input = ''
@@ -40,6 +40,10 @@ class SleepyGui(QMainWindow):
     self.button.setGeometry(200, 300, 300, 40)
     self.button.move(20, 80)
 
+    self.shutdown_button = QPushButton('Shutdown', self)
+    self.shutdown_button.setGeometry(200, 300, 300, 40)
+    self.shutdown_button.move(20, 150)
+
     if KasaAPI.KASA_ENABLED:
       self.cb = QComboBox(self)
       self.cb.addItems(list(KasaAPI.KASA_HOSTS.keys()))
@@ -47,7 +51,8 @@ class SleepyGui(QMainWindow):
       self.cb.move(300,30)
 
     # connect button to function on_click
-    self.button.clicked.connect(self.on_click)
+    self.button.clicked.connect(self.schedule_sleep)
+    self.shutdown_button.clicked.connect(self.shutdown)
     self.show()
     self.move(self.qtRectangle.topLeft())
 
@@ -58,11 +63,16 @@ class SleepyGui(QMainWindow):
     print("Current index", i, "selection changed ", self.cb.currentText())
 
   @pyqtSlot()
-  def on_click(self):
+  def schedule_sleep(self):
     self.text_input = self.textbox.text()
     self.execute_timer()
-    #QMessageBox.question(self, 'Message - pythonspot.com', "You typed: " + textboxValue, QMessageBox.Ok, QMessageBox.Ok)
-    #self.textbox.setText("")
+
+  @pyqtSlot()
+  def shutdown(self):
+    if KasaAPI.KASA_ENABLED:
+      self.setWindowTitle('Shutting down...')
+      KasaAPI.kill_kasa_execute(self.cb.currentText())
+      exit(0)
 
   def execute_timer(self):
     if self.text_input == '':

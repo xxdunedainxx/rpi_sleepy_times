@@ -1,12 +1,23 @@
+import os
+
 class KasaAPI:
   KASA_HOSTS: dict = {
    'raspberry pi' : '10.0.0.210',
+    'fish-light': '10.0.0.100',
     'all' : 'all'
   }
   KASA_ENABLED: bool = True
 
   def __init__(self):
     pass
+
+  @staticmethod
+  def kill_kasa_execute(host: str) -> str:
+    if host == 'all':
+      for key in KasaAPI.KASA_HOSTS.keys():
+        os.system(f"kasa --host {KasaAPI.KASA_HOSTS[key]} off &&")
+    else:
+      os.system(f"kasa --host {KasaAPI.KASA_HOSTS[host]} off")
 
   @staticmethod
   def kill_kasa_outlet_cmd(host: str) -> str:

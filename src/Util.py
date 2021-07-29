@@ -20,3 +20,6 @@ def desktop_icon_raspbian():
 
 def installer():
   desktop_icon_raspbian()
+
+def macosx_fix():
+  os.environ['QT_MAC_WANTS_LAYER'] = '1'

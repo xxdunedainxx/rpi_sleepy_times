@@ -1,6 +1,7 @@
 class KasaAPI:
   KASA_HOSTS: dict = {
    'raspberry pi' : '10.0.0.210',
+    'fish-light': '10.0.0.100',
     'all' : 'all'
   }
   KASA_ENABLED: bool = True

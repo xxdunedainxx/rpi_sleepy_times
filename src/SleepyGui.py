@@ -71,7 +71,7 @@ class SleepyGui(QMainWindow):
   def shutdown(self):
     if KasaAPI.KASA_ENABLED:
       self.setWindowTitle('Shutting down...')
-      KasaAPI.kill_kasa_outlet_cmd(self.cb.currentText())
+      KasaAPI.kill_kasa_execute(self.cb.currentText())
       exit(0)
 
   def execute_timer(self):

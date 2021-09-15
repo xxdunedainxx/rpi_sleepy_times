@@ -1,4 +1,5 @@
 import os
+from src.Util import LOCATION_FORMATTED, python_location_formatted
 
 class KasaAPI:
   KASA_HOSTS: dict = {
@@ -15,20 +16,20 @@ class KasaAPI:
   def kill_kasa_execute(host: str) -> str:
     if host == 'all':
       for key in KasaAPI.KASA_HOSTS.keys():
-        os.system(f"kasa --host {KasaAPI.KASA_HOSTS[key]} off &&")
+        os.system(f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[key]}")
     else:
-      os.system(f"kasa --host {KasaAPI.KASA_HOSTS[host]} off")
+      os.system(f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]}")
 
   @staticmethod
   def kill_kasa_outlet_cmd(host: str) -> str:
     if host == 'all':
       cmdBuild: str = ''
       for key in KasaAPI.KASA_HOSTS.keys():
-        cmdBuild+=f"kasa --host {KasaAPI.KASA_HOSTS[key]} off &&"
+        cmdBuild+=f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]} &&"
       cmdBuild+=' true'
       return cmdBuild
     else:
-      return (f"kasa --host {KasaAPI.KASA_HOSTS[host]} off")
+      return (f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]}")
 
   @staticmethod
   def turn_on_kasa_outlet_cmd(host: str) -> str:

@@ -6,3 +6,6 @@
 rpisleepytimer.egg-info/
 dist/
 build/
+
+*.log
+sleeperScript*.sh

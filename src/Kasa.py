@@ -1,10 +1,10 @@
 import os
-from src.Util import LOCATION_FORMATTED, python_location_formatted
+from src.Util import INSTALL_LOCATION, python_location
+from kasa import Discover
+import asyncio
 
 class KasaAPI:
   KASA_HOSTS: dict = {
-   'raspberry pi' : '10.0.0.210',
-    'fish-light': '10.0.0.100',
     'all' : 'all'
   }
   KASA_ENABLED: bool = True
@@ -13,23 +13,38 @@ class KasaAPI:
     pass
 
   @staticmethod
+  async def get_devices():
+    devices = await Discover.discover()
+    return devices
+
+  @staticmethod
+  def init_kasa_api():
+    KasaAPI.KASA_HOSTS = {
+    }
+
+    devices = asyncio.run(KasaAPI.get_devices())
+
+    for device in devices.keys():
+      KasaAPI.KASA_HOSTS[devices[device].alias] = devices[device].host
+
+  @staticmethod
   def kill_kasa_execute(host: str) -> str:
     if host == 'all':
       for key in KasaAPI.KASA_HOSTS.keys():
-        os.system(f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[key]}")
+        os.system(f"kasa --host {KasaAPI.KASA_HOSTS[key]} off &&")
     else:
-      os.system(f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]}")
+      os.system(f"kasa --host {KasaAPI.KASA_HOSTS[host]} off")
 
   @staticmethod
   def kill_kasa_outlet_cmd(host: str) -> str:
     if host == 'all':
       cmdBuild: str = ''
       for key in KasaAPI.KASA_HOSTS.keys():
-        cmdBuild+=f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]} &&"
+        cmdBuild+=f"{python_location()} {INSTALL_LOCATION}/cli.py off {KasaAPI.KASA_HOSTS[host]} &&"
       cmdBuild+=' true'
       return cmdBuild
     else:
-      return (f"{python_location_formatted()} {LOCATION_FORMATTED}{os.sep}{os.sep}cli.py off {KasaAPI.KASA_HOSTS[host]}")
+      return (f"{python_location()} {INSTALL_LOCATION}/cli.py off {KasaAPI.KASA_HOSTS[host]} ")
 
   @staticmethod
   def turn_on_kasa_outlet_cmd(host: str) -> str:

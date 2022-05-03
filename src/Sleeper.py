@@ -1,6 +1,6 @@
 import os
 import random
-from subprocess import  Popen,CREATE_NEW_CONSOLE
+from subprocess import Popen
 import time
 import glob
 
@@ -38,6 +38,7 @@ def sleeper(SHUTDOWN_TIME_MINUTES: int = 45, kasaHost: str = ''):
     os.chmod(scriptName, 0o777)
     if is_windows():
       LogFactory.MAIN_LOG.info("running windows sleeper...")
+      from subprocess import CREATE_NEW_CONSOLE
       Popen([f"{scriptName}"], creationflags=CREATE_NEW_CONSOLE, shell=True)
     else:
       LogFactory.MAIN_LOG.info("running unix sleeper..")

@@ -4,6 +4,9 @@ from src.Kasa import KasaAPI
 from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget,QComboBox, QPushButton, QAction, QLineEdit, QMessageBox, QDesktopWidget
 from PyQt5.QtCore import pyqtSlot
 
+from src.LogFactory import LogFactory
+from src.ErrorFactory import errorStackTrace
+
 class SleepyGui(QMainWindow):
 
   def __init__(self):
@@ -70,9 +73,15 @@ class SleepyGui(QMainWindow):
   @pyqtSlot()
   def shutdown(self):
     if KasaAPI.KASA_ENABLED:
-      self.setWindowTitle('Shutting down...')
-      KasaAPI.kill_kasa_execute(self.cb.currentText())
-      exit(0)
+      try:
+        self.setWindowTitle('Shutting down...')
+        KasaAPI.kill_kasa_execute(self.cb.currentText())
+        exit(0)
+      except Exception as e:
+        LogFactory.MAIN_LOG.error(f"{errorStackTrace(e)}")
+        exit(1)
+    else:
+      MAIN_LOG.info("Kasa not enabled?")
 
   def execute_timer(self):
     if self.text_input == '':

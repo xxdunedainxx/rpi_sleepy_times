@@ -2,9 +2,7 @@
 
 ![See screen capture for example](/assets/screencapofapp.png) 
 
-Erin and I frequently watch shows on our raspberry pi media system at night to go to sleep. The Pi will run until it shuts off. 
-
-I decided to build this dumb application to enable Erin or I to have the pi shut itself off after a certain amount of time we define. 
+I decided to build this dumb application to enable myself to have the a device shut itself off after a certain amount of time. 
 
 The app will display a GUI built in PyQT, expecting the user to input an integer, which will be the sleep time in minutes.
 

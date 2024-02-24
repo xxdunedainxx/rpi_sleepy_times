@@ -29,11 +29,7 @@ class KasaAPI:
 
   @staticmethod
   def kill_kasa_execute(host: str) -> str:
-    if host == 'all':
-      for key in KasaAPI.KASA_HOSTS.keys():
-        os.system(f"kasa --host {KasaAPI.KASA_HOSTS[key]} off &&")
-    else:
-      os.system(f"kasa --host {KasaAPI.KASA_HOSTS[host]} off")
+    os.system(KasaAPI.kill_kasa_outlet_cmd(host))
 
   @staticmethod
   def kill_kasa_outlet_cmd(host: str) -> str:
@@ -51,8 +47,8 @@ class KasaAPI:
     if host == 'all':
       cmdBuild: str = ''
       for key in KasaAPI.KASA_HOSTS.keys():
-        cmdBuild+=f"kasa --host {KasaAPI.KASA_HOSTS[key]} on &&"
+        cmdBuild+=f"{python_location()} {INSTALL_LOCATION}/cli.py on {KasaAPI.KASA_HOSTS[host]} &&"
       cmdBuild+=' true'
       return cmdBuild
     else:
-      return (f"kasa --host {KasaAPI.KASA_HOSTS[host]} on")
+      return (f"{python_location()} {INSTALL_LOCATION}/cli.py on {KasaAPI.KASA_HOSTS[host]} ")
